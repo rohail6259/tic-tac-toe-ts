@@ -111,19 +111,17 @@ const Game: React.FC = () => {
         );
         setStepNumber(newHistory.length);
         setXIsNext(!xIsNext);
+        gsap.to(`.square${i} span`, {
+            duration: 1,
+            autoAlpha: 1,
+            fontSize: 20,
+            ease: "bounce.out",
+        });
     };
 
     const jumpTo = (step: number): void => {
         setStepNumber(step);
         setXIsNext(step % 2 === 0);
-        if (step % 2 === 0) {
-            gsap.to(`.square${step - 1} span`, {
-                duration: 1,
-                autoAlpha: 0,
-                fontSize: 40,
-                ease: "power4.out",
-            });
-        }
     };
 
     const current = history[stepNumber];
