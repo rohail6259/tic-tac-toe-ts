@@ -37,7 +37,6 @@ interface SquareProps {
     index: Number;
 }
 const Square: React.FC<SquareProps> = (props) => {
-    console.log(props);
     return (
         <button
             className={`square square${props.index}`}
@@ -112,17 +111,19 @@ const Game: React.FC = () => {
         );
         setStepNumber(newHistory.length);
         setXIsNext(!xIsNext);
-        gsap.to(`.square${i} span`, {
-            duration: 1,
-            autoAlpha: 1,
-            fontSize: 20,
-            ease: "bounce.out",
-        });
     };
 
     const jumpTo = (step: number): void => {
         setStepNumber(step);
         setXIsNext(step % 2 === 0);
+        if (step % 2 === 0) {
+            gsap.to(`.square${step - 1} span`, {
+                duration: 1,
+                autoAlpha: 0,
+                fontSize: 40,
+                ease: "power4.out",
+            });
+        }
     };
 
     const current = history[stepNumber];
@@ -138,25 +139,43 @@ const Game: React.FC = () => {
     });
 
     let status;
+    const confetti = document.querySelector(".confetti");
     if (winner) {
         status = "Winner: " + winner;
+        gsap.to(confetti, {
+            duration: 1,
+            display: "block",
+            onComplete: () => {
+                gsap.to(confetti, {
+                    duration: 1,
+                    autoAlpha: 1,
+                });
+            },
+        });
     } else {
         status = "Next player: " + (xIsNext ? "X" : "O");
     }
 
     return (
-        <div className="game">
-            <div className="game-board">
-                <Board
-                    squares={current.squares}
-                    onClick={(i) => handleClick(i)}
-                />
+        <>
+            <img
+                className="confetti"
+                src="https://i.pinimg.com/originals/7f/3a/68/7f3a68fe9ae08dfcfb26a0863a20d375.gif"
+                alt="confetti"
+            />
+            <div className="game">
+                <div className="game-board">
+                    <Board
+                        squares={current.squares}
+                        onClick={(i) => handleClick(i)}
+                    />
+                </div>
+                <div className="game-info">
+                    <div>{status}</div>
+                    <ol>{moves}</ol>
+                </div>
             </div>
-            <div className="game-info">
-                <div>{status}</div>
-                <ol>{moves}</ol>
-            </div>
-        </div>
+        </>
     );
 };
 

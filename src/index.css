@@ -35,7 +35,7 @@ ul {
 .square span {
     opacity: 0;
     visibility: hidden;
-	font-size: 40px;
+    font-size: 40px;
 }
 
 .square:focus {
@@ -48,9 +48,20 @@ ul {
 
 .game {
     display: flex;
-    flex-direction: row;
+    justify-content: center;
+    align-content: center;
+    align-items: center;
 }
 
 .game-info {
     margin-left: 20px;
+}
+
+.confetti {
+    display: none;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    z-index: -1;
 }
